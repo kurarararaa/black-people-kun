@@ -1,24 +1,24 @@
 package main
 
 import (
+	"log"
+
 	"github.com/nlopes/slack"
 )
 
 func main() {
-	// API Clientを作成する
-	api := slack.New("Dummy")
+	// API Client を作成する
+	api := slack.New("xoxb-ぎゃおーーん")
 
-	// WebSocketでSlack RTM APIに接続する
+	// WebSocket で Slack RTM API に接続する
 	rtm := api.NewRTM()
-	// goroutineで並列化する
 	go rtm.ManageConnection()
 
-	// イベントを取得する
 	for msg := range rtm.IncomingEvents {
-		// 型swtichで型を比較する
 		switch ev := msg.Data.(type) {
 		case *slack.MessageEvent:
-			// MessageEventだったら、「Hello」と応答する
+			// メッセージイベントの場合は、入力メッセージを Log 出力
+			log.Printf("Message: %v\n", ev.Text)
 			rtm.SendMessage(rtm.NewOutgoingMessage("は？", ev.Channel))
 		}
 	}
